@@ -865,7 +865,7 @@ function calcScore(){
   if(S.conds.has('qiangGang'))add(1,'搶槓','Robbed a Kong');
   if(S.conds.has('gangShang'))add(1,'槓上自摸','Self-draw after Kong');
   if(S.specialHand!=='字一色'){
-    if(S.handType==='ping') add(1,'平糊','All Sequences');
+    if(S.handType==='ping'&&S.dragonTrips.size===0&&S.windTrips.size===0) add(1,'平糊','All Sequences');
     else if(S.handType==='duiDui'){
       if(S.conds.has('menQian')){total-=1;bd.pop();add(8,'坎坎糊','Concealed All-Triplets');}
       else add(3,'對對糊','All Triplets');
