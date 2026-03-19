@@ -26,13 +26,16 @@ body{
 }
 body::after{
   content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75 0.65' numOctaves='6' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' fill='%231e6642' filter='url(%23f)'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse 80% 55% at 14% 10%,rgba(39,122,78,.55) 0%,transparent 65%),
-    radial-gradient(ellipse 65% 50% at 88% 92%,rgba(39,122,78,.4) 0%,transparent 60%),
-    linear-gradient(158deg,#0a2214 0%,#1e6642 50%,#0c2a18 100%);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75 0.65' numOctaves='6' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' fill='%231e6642' filter='url(%23f)'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+  background-size:300px 300px;
 }
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,.52) 100%)}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,.52) 100%),
+    radial-gradient(ellipse 80% 55% at 14% 10%,rgba(39,122,78,.35) 0%,transparent 65%),
+    radial-gradient(ellipse 65% 50% at 88% 92%,rgba(39,122,78,.25) 0%,transparent 60%);
+}
 .wrap{max-width:440px;margin:0 auto;padding:0 18px;position:relative;z-index:1}
 .hdr{text-align:center;padding:28px 0 12px}
 .hdr-badge{display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);border-radius:20px;padding:6px 18px;font-size:13px;font-style:italic;color:var(--chalk-d);margin-bottom:16px}
@@ -49,14 +52,14 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .hand-box{background:rgba(0,0,0,.26);border:1px solid rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.18);border-radius:18px;padding:14px 14px 16px;margin-bottom:14px;min-height:78px;position:relative;overflow:hidden;transition:opacity .3s;scroll-margin-top:0}
 .hand-box.frozen{opacity:.45}
 .hand-box::before{content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;}
-.hand-lbl{font-size:13px;font-style:italic;color:var(--chalk-dim);margin-bottom:8px}
-.hand-frozen-msg{position:absolute;inset:0;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.18);font-size:13px;font-style:italic;color:rgba(220,200,175,.5);pointer-events:none;z-index:2;padding:0 20px;text-align:center;line-height:1.6}
+.hand-lbl{font-size:13px;color:var(--chalk-dim);margin-bottom:8px}
+.hand-frozen-msg{position:absolute;inset:0;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.18);font-size:13px;color:rgba(220,200,175,.5);pointer-events:none;z-index:2;padding:0 20px;text-align:center;line-height:1.6}
 .flower-row-lbl{font-size:11px;font-style:italic;color:rgba(220,200,175,.32);margin-bottom:4px}
 #flowerRowWrap{min-height:0;transition:none}
-.tiles-row{display:flex;flex-wrap:wrap;gap:2px;align-items:flex-end;min-height:70px}
-.tiles-empty{display:flex;align-items:center;gap:7px;height:72px;color:rgba(200,180,150,.3);font-size:14px;font-style:italic}
+.tiles-row{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;min-height:70px}
+.tiles-empty{display:flex;align-items:center;gap:7px;height:72px;color:rgba(200,180,150,.3);font-size:14px;grid-column:1/-1}
 .tiles-empty::before{content:"✦";font-size:9px;opacity:.45;font-style:normal}
-.tile{display:block;flex-shrink:0;flex-grow:0;line-height:0;width:64px;transform:rotate(var(--t,0deg));transition:transform .22s cubic-bezier(.34,1.56,.64,1),filter .15s;cursor:default}
+.tile{display:block;width:100%;line-height:0;transform:rotate(var(--t,0deg));transition:transform .22s cubic-bezier(.34,1.56,.64,1),filter .15s;cursor:default}
 .tile img{display:block;width:100%;height:auto}
 .tile.sm{width:40px}
 .tile:hover{transform:translateY(-8px) rotate(var(--t,0deg));filter:drop-shadow(0 8px 6px rgba(0,0,0,.5))}
@@ -429,7 +432,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <div class="hand-lbl">你的牌 · your hand builds here</div>
     <div id="flowerRowWrap"></div>
     <div class="tiles-row" id="tilesRow">
-      <div class="tiles-empty">select your hand below and tiles appear here…</div>
+      
     </div>
   </div>
 
@@ -583,14 +586,13 @@ function ph(cls,inner,d=0,sm=false){
 // Man tiles — all illustrated
 const MAN_KEYS=['man1','man2','man3','man4','man5','man6','man7','man8','man9'];
 const manT=(n,d=0,sm=false)=>tileImg(MAN_KEYS[(n-1)%9],d,sm);
-
-// Sou + pin — placeholder until tiles arrive
+// Sou (索) + Pin (筒) — all illustrated
 const SOK_KEYS=['sok1','sok2','sok3','sok4','sok5','sok6','sok7','sok8','sok9'];
 const souT=(n,d=0,sm=false)=>tileImg(SOK_KEYS[(n-1)%9],d,sm);
 const TUNG_KEYS=['tung1','tung2','tung3','tung4','tung5','tung6','tung7','tung8','tung9'];
 const pinT=(n,d=0,sm=false)=>tileImg(TUNG_KEYS[(n-1)%9],d,sm);
 
-// Winds — placeholder until tiles arrive
+// Winds
 const WIND_KEYS={東:'wind-east',南:'wind-south',西:'wind-west',北:'wind-north'};
 const windT=(w,d=0,sm=false)=>{
   const key=WIND_KEYS[w];
@@ -614,7 +616,10 @@ const flowerT=(f,d=0,sm=false)=>{
 };
 
 function suitTile(n,d=0,sm=false){
-  const s=[...S.suits].find(x=>['man','sou','pin'].includes(x));
+  return suitTileFor(null,n,d,sm);
+}
+function suitTileFor(suit,n,d=0,sm=false){
+  const s=suit||[...S.suits].find(x=>['man','sou','pin'].includes(x))||'man';
   if(s==='sou') return souT(n,d,sm);
   if(s==='pin') return pinT(n,d,sm);
   return manT(n,d,sm);
@@ -627,10 +632,6 @@ function updateHand(){
   if(old)old.remove();
   if(S.step===1){
     box.classList.add('frozen');
-    const m=document.createElement('div');
-    m.className='hand-frozen-msg';
-    m.textContent='Your tiles will appear here once you start describing your hand ✦';
-    box.appendChild(m);
     return;
   }
   box.classList.remove('frozen');
@@ -674,43 +675,94 @@ function updateHand(){
     for(let i=0;i<4;i++) tiles.push(suitTile(i+2),suitTile(i+2),suitTile(i+2),suitTile(i+2));
   } else {
     // ── Build hand from actual state ──
-    // Dragon triplets (3 each)
+    // Pairs are collected separately and appended LAST so they always appear on the final row.
+    let pairTiles = [];
+
+    // Dragon triplets (3 each) — pairs deferred
     [...S.dragonTrips].forEach(zh=>{
       for(let i=0;i<3;i++){tiles.push(dragonT(zh,d));d+=.03;}
     });
-    // Dragon pair (2)
     if(S.dragonPair){
-      tiles.push(dragonT(S.dragonPair,d),dragonT(S.dragonPair,d+=.03)); d+=.03;
+      pairTiles.push(dragonT(S.dragonPair,d),dragonT(S.dragonPair,d+=.03)); d+=.03;
     }
-    // Wind triplets (3 each)
+    // Wind triplets (3 each) — pairs deferred
     [...S.windTrips].forEach(w=>{
       for(let i=0;i<3;i++){tiles.push(windT(w,d));d+=.03;}
     });
-    // Wind pair (2)
     if(S.windPair){
-      tiles.push(windT(S.windPair,d),windT(S.windPair,d+=.03)); d+=.03;
+      pairTiles.push(windT(S.windPair,d),windT(S.windPair,d+=.03)); d+=.03;
     }
-    // Numbered sequences (3 each) - show as consecutive tiles
-    const seqStarts=[1,4,2,6,3,5];
-    for(let s=0;s<S.numSeq;s++){
-      const base=seqStarts[s%seqStarts.length];
-      tiles.push(suitTile(base,d),suitTile(base+1,d+=.03),suitTile(base+2,d+=.03)); d+=.03;
+
+    const hasCountedSets = S.numSeq>0 || S.numTrip>0 || S.numKong>0 || S.numPair>0;
+    // Honor-only: do NOT show numbered filler — let the hand wait for dragon/wind selections
+    const suitIsHonorOnly = S.suits.size===0 || [...S.suits].every(x=>x==='honor');
+    const hasSuit = S.suits.size > 0 && !suitIsHonorOnly;
+
+    if(hasCountedSets){
+      const seqStarts=[1,4,7,2,5,8,3,6,9];
+      for(let s=0;s<S.numSeq;s++){
+        const base=seqStarts[s%9]||1;
+        tiles.push(suitTile(base,d),suitTile(Math.min(base+1,9),d+=.03),suitTile(Math.min(base+2,9),d+=.03)); d+=.03;
+      }
+      const tripNums=[3,7,1,9,5,2,8,4,6];
+      for(let t2=0;t2<S.numTrip;t2++){
+        const n=tripNums[t2%9];
+        tiles.push(suitTile(n,d),suitTile(n,d+=.03),suitTile(n,d+=.03)); d+=.03;
+      }
+      for(let k=0;k<S.numKong;k++){
+        const n=4+k;
+        tiles.push(suitTile(n,d),suitTile(n,d+=.03),suitTile(n,d+=.03),suitTile(n,d+=.03)); d+=.03;
+      }
+      for(let p=0;p<S.numPair;p++){
+        pairTiles.push(suitTile(2,d),suitTile(2,d+=.03)); d+=.03;
+      }
+    } else if(hasSuit && S.handType){
+      const placed = tiles.length; // pairs not yet added
+      const target = 14;
+      const hasPair = pairTiles.length > 0;
+      const pairSlots = hasPair ? 0 : 2;
+      const suitTarget = target - placed - pairTiles.length;
+
+      if(suitTarget > 0){
+        const numericSuits=[...S.suits].filter(x=>['man','sou','pin'].includes(x));
+        const nSuits=numericSuits.length||1;
+        const getSuit=i=>numericSuits[i%nSuits]||'man';
+
+        if(S.handType==='ping'){
+          const seqTiles = suitTarget - pairSlots;
+          const numSeqs = Math.floor(seqTiles / 3);
+          const seqDefs=[[1,2,3],[4,5,6],[7,8,9],[1,2,3],[5,6,7]];
+          for(let s=0;s<numSeqs;s++){
+            seqDefs[s%seqDefs.length].forEach(n=>{tiles.push(suitTileFor(getSuit(s),n,d));d+=.03;});
+          }
+          if(!hasPair) pairTiles.push(suitTileFor(getSuit(0),5,d),suitTileFor(getSuit(0),5,d+=.03));
+        } else if(S.handType==='duiDui'){
+          const tripTiles = suitTarget - pairSlots;
+          const numTrips = Math.floor(tripTiles / 3);
+          const tripNums=[3,6,9,2,5,8,1,4,7];
+          for(let t=0;t<numTrips;t++){
+            const suit=getSuit(t);
+            const n=tripNums[t%9];
+            tiles.push(suitTileFor(suit,n,d),suitTileFor(suit,n,d+=.03),suitTileFor(suit,n,d+=.03)); d+=.03;
+          }
+          if(!hasPair) pairTiles.push(suitTileFor(getSuit(0),5,d),suitTileFor(getSuit(0),5,d+=.03));
+        } else {
+          const bodyTiles = suitTarget - pairSlots;
+          let added=0, si=0;
+          [[1,2,3],[5,6,7]].forEach(seq=>{
+            if(added+3<=bodyTiles){ seq.forEach(n=>{tiles.push(suitTileFor(getSuit(si),n,d));d+=.03;}); added+=3; si++; }
+          });
+          if(added+3<=bodyTiles){
+            tiles.push(suitTileFor(getSuit(si),9,d),suitTileFor(getSuit(si),9,d+=.03),suitTileFor(getSuit(si),9,d+=.03)); d+=.03; added+=3; si++;
+          }
+          const extras=[[2,3,4],[6,7,8]]; let ei=0;
+          while(added+3<=bodyTiles){ extras[ei%2].forEach(n=>{tiles.push(suitTileFor(getSuit(si),n,d));d+=.03;}); added+=3; si++; ei++; }
+          if(!hasPair) pairTiles.push(suitTileFor(getSuit(0),4,d),suitTileFor(getSuit(0),4,d+=.03));
+        }
+      }
     }
-    // Numbered triplets (3 each)
-    const tripNums=[3,7,1,9,5,2,8];
-    for(let t2=0;t2<S.numTrip;t2++){
-      const n=tripNums[t2%tripNums.length];
-      tiles.push(suitTile(n,d),suitTile(n,d+=.03),suitTile(n,d+=.03)); d+=.03;
-    }
-    // Kongs (4 each)
-    for(let k=0;k<S.numKong;k++){
-      const n=4+k;
-      tiles.push(suitTile(n,d),suitTile(n,d+=.03),suitTile(n,d+=.03),suitTile(n,d+=.03)); d+=.03;
-    }
-    // Numbered pair (2)
-    for(let p=0;p<S.numPair;p++){
-      tiles.push(suitTile(2,d),suitTile(2,d+=.03)); d+=.03;
-    }
+    // Append pairs LAST — they always appear at the end (last row)
+    tiles.push(...pairTiles);
   }
 
   if(tiles.length>0){
@@ -720,7 +772,7 @@ function updateHand(){
       if(i>=prevCount) el.classList.add('tile-new');
     });
   } else {
-    row.innerHTML='<div class="tiles-empty">select your hand below and tiles appear here\u2026</div>';
+    row.innerHTML='';
   }
 }
 /* ═══ PROGRESS ═══ */
@@ -770,7 +822,10 @@ function calcScore(){
   if(S.specialHand==='字一色'){add(10,'字一色','All Honours');add(3,'對對糊','All Triplets (implied)');}
   const sfMap={東:1,南:2,西:3,北:4};
   const sfn=sfMap[S.seatWind];
-  if(sfn&&(S.flowers.has(sfn)||S.flowers.has(sfn+4)))add(1,'正花','Seat Flower');
+  if(sfn){
+    if(S.flowers.has(sfn))   add(1,'正花','Seat Flower');
+    if(S.flowers.has(sfn+4)) add(1,'正花','Seat Flower');
+  }
   if([1,2,3,4].every(n=>S.flowers.has(n)))add(2,'一臺花 (春夏秋冬)','Complete Season Set');
   if([5,6,7,8].every(n=>S.flowers.has(n)))add(2,'一臺花 (梅蘭菊竹)','Complete Plant Set');
   if(S.winType==='ziMo')      add(1,'自摸','Self Draw');
@@ -786,7 +841,7 @@ function calcScore(){
     }
   }
   const numSuits=[...S.suits].filter(x=>['man','sou','pin'].includes(x));
-  const hasHon=S.dragonTrips.size>0||S.windTrips.size>0||!!S.dragonPair||!!S.windPair;
+  const hasHon=S.dragonTrips.size>0||S.windTrips.size>0||!!S.dragonPair||!!S.windPair||S.suits.has('honor');
   if(numSuits.length===1&&!hasHon) add(7,'清一色','Pure Suit');
   else if(numSuits.length===1&&hasHon) add(3,'混一色','Mixed Suit with Honours');
   else if(S.suits.has('honor')&&numSuits.length===0&&S.specialHand!=='字一色') add(10,'字一色','All Honours');
@@ -1020,9 +1075,11 @@ function step4(){
     <div class="suit-illu-grid" id="suitGrid"></div>
         <div class="div-line"></div>
     <div class="sec-lbl">dragons · 中發白</div>
+    <div class="dr-hint">Tap once = triplet +1番 · tap again = pair 眼 · tap again = remove</div>
     <div class="suit-illu-grid">${drBtns}</div>
     <div class="div-line"></div>
     <div class="sec-lbl">winds · 風牌</div>
+    <div class="dr-hint">Same pattern · seat and round wind triplets each score +1番</div>
     <div class="suit-illu-grid">${windBtns}</div>
     <div class="nav">
       <button class="btn-back" onclick="goBack()">Back</button>
