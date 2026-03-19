@@ -445,7 +445,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     <span class="hdr-char">番</span>
     <div class="hdr-sub">Calculator</div>
     <div class="hdr-divider"><span>✦</span></div>
-    <div class="hdr-credit-line">Tiles by <a href="https://bobodoodles.com" target="_blank" rel="noopener" class="hdr-credit-link">Bobo Doodles</a></div>
+    <div class="hdr-credit-line" id="hdrCredit">Tiles by <a href="https://bobodoodles.com" target="_blank" rel="noopener" class="hdr-credit-link">Bobo Doodles</a></div>
   </header>
 
   <div class="hand-box" id="handBox">
@@ -813,13 +813,13 @@ function goNext(){
   const maxStep=S.flowersIncluded?(hasSpecialNav?4:5):(hasSpecialNav?3:4);
   // When flowers off, step2 goes directly to step4 logic (mapped above)
   if(S.step<maxStep){S.step++;render();
-    requestAnimationFrame(()=>{const el=document.getElementById('stepContent');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});});
+    requestAnimationFrame(()=>{const el=document.getElementById('hdrCredit');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});});
   }
 }
 function goBack(){
   if(S.step>1){S.step--;render();
     requestAnimationFrame(()=>{
-      const el=document.getElementById('stepContent');
+      const el=document.getElementById('hdrCredit');
       if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
     });
   }
@@ -1458,7 +1458,7 @@ function resetHand(){
   S.dragonTrips.clear();S.dragonPair=null;S.windTrips.clear();S.windPair=null;
   render();
   requestAnimationFrame(()=>{
-    const el=document.getElementById('stepContent');
+    const el=document.getElementById('hdrCredit');
     if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
   });
 }
