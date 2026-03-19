@@ -813,6 +813,7 @@ function renderProgress(){
 
 /* ═══ NAV ═══ */
 function goNext(){
+  playClick(0);
   const hasSpecialNav=S.specialHand&&S.specialHand!==null;
   const maxStep=S.flowersIncluded?(hasSpecialNav?4:5):(hasSpecialNav?3:4);
   // When flowers off, step2 goes directly to step4 logic (mapped above)
@@ -821,6 +822,7 @@ function goNext(){
   }
 }
 function goBack(){
+  playClick(2);
   if(S.step>1){S.step--;render();
     requestAnimationFrame(()=>{
       const el=document.getElementById('hdrCredit');
@@ -1008,7 +1010,7 @@ function step3(){
         const sfMap={東:1,南:2,西:3,北:4};
         const sfn=sfMap[S.seatWind]||0;
         const isSeatFlower=sfn&&(f.n===sfn||f.n===sfn+4);
-        return `<div class="flower-tile-btn ${sel?'sel':''}" onclick="toggleFlower(${f.n})">
+        return `<div class="flower-tile-btn ${sel?'sel':''}" data-n="${f.n}" onclick="toggleFlower(${f.n})">
           <img src="${src}" alt="${f.c}" style="width:100%;height:auto;display:block">
           <div class="tile-label"><span class="tile-label-zh">${f.c}</span><span class="tile-label-en">${f.en}</span></div>
           ${isSeatFlower?'<div class="ftile-fan-badge">+1番</div>':''}
@@ -1016,14 +1018,7 @@ function step3(){
         </div>`;
       }).join('')}
     </div>
-    ${(()=>{
-      const seasons=[5,6,7,8].every(n=>S.flowers.has(n));
-      const plants=[1,2,3,4].every(n=>S.flowers.has(n));
-      if(seasons||plants) return '<div class="flower-set-banner">'+
-        (seasons&&plants?'🎉 Full set! +2番 seasons + +2番 plants':seasons?'春夏秋冬 complete · +2番 bonus':'梅蘭菊竹 complete · +2番 bonus')+
-        '</div>';
-      return '';
-    })()}
+    <div class="flower-set-banner" id="flowerSetBanner" style="visibility:hidden;margin-top:10px"></div>
     <div class="nav">
       <button class="btn-back" onclick="goBack()">← Back</button>
       <button class="btn-next" onclick="goNext()">Continue →</button>
@@ -1407,7 +1402,43 @@ function adjMinFan(d){
   document.getElementById('mfVal').textContent=S.minFan===0?'off':S.minFan;
 }
 function pickWind(key,val){playClick(3);S[key]=val;render()}
-function toggleFlower(n){playClick(n%4);S.flowers.has(n)?S.flowers.delete(n):S.flowers.add(n);renderNoScroll()}
+function toggleFlower(n){
+  playClick(n%4);
+  S.flowers.has(n)?S.flowers.delete(n):S.flowers.add(n);
+  // Patch only the changed parts — avoids scroll jump from full re-render
+  const btn=document.querySelector(`.flower-tile-btn[data-n="${n}"]`);
+  if(btn){
+    const sel=S.flowers.has(n);
+    btn.classList.toggle('sel',sel);
+    let chk=btn.querySelector('.ftile-check');
+    if(sel&&!chk){chk=document.createElement('div');chk.className='ftile-check';chk.textContent='✓';btn.appendChild(chk);}
+    else if(!sel&&chk){chk.remove();}
+    updateHand();
+  } else { renderNoScroll(); }
+  // Update hint text
+  const hint=document.querySelector('.step-hint');
+  if(hint){
+    const fc=S.flowers.size;
+    if(fc>=8)      hint.textContent='🎉 大花糊! All 8 flowers - instant 8 番 win!';
+    else if(fc>=7) hint.textContent='花糊! 7 flowers = instant 3 番 self-draw win!';
+    else if([1,2,3,4].every(f=>S.flowers.has(f))) hint.textContent='梅蘭菊竹 - complete plant set! +2 番 bonus.';
+    else if([5,6,7,8].every(f=>S.flowers.has(f))) hint.textContent='春夏秋冬 - complete season set! +2 番 bonus.';
+    else if(fc>0) hint.textContent=fc+' flower'+(fc>1?'s':'')+' selected.';
+    else hint.textContent='Tap the flowers you have. None? Skip ahead.';
+  }
+  // Update flower set banner — use visibility to avoid layout shift
+  const fsb=document.getElementById('flowerSetBanner');
+  if(fsb){
+    const seasons=[5,6,7,8].every(f=>S.flowers.has(f));
+    const plants=[1,2,3,4].every(f=>S.flowers.has(f));
+    if(seasons||plants){
+      fsb.textContent=seasons&&plants?'🎉 Full set! +2番 seasons + +2番 plants':seasons?'春夏秋冬 complete · +2番 bonus':'梅蘭菊竹 complete · +2番 bonus';
+      fsb.style.visibility='visible';
+    } else {
+      fsb.style.visibility='hidden';
+    }
+  }
+}
 function pickSpecial(zh){playClick(0);S.specialHand=zh;render()}
 function pickHandType(t){
   playClick(0);
